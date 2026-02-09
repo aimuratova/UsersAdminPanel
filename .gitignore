@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /UsersAdminPanel/appsettings.json
+/UsersAdminPanel/Properties/ServiceDependencies/UsersAdminPanel20260209143147 - Web Deploy/profile.arm.json
