@@ -39,6 +39,8 @@ services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 // Добавление сервисов контроллеров с представлениями
 services.AddControllersWithViews();
 
+services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Конфигурация конвейера HTTP-запросов

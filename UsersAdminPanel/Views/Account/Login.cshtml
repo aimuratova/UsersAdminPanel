@@ -57,6 +57,7 @@
                         password: $('#Password').val()
                     }),
                     success: function (response) {
+                        console.log(response);
                         if (!response.success) {
 							$('#errorLabel').text(response.message).show();
 						}
@@ -66,6 +67,7 @@
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
+						console.error('Error:', textStatus, errorThrown);
                         $('#errorLabel').text(jqXHR.responseText).show();
                     }
                 });

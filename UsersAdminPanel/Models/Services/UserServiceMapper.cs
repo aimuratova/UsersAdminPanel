@@ -1,6 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
+using UserAdminPanel.DAL.Interfaces;
 using UserAdminPanel.DAL.Models;
 using UsersAdminPanel.Models.ViewModels;
 
@@ -9,10 +10,16 @@ namespace UsersAdminPanel.Models.Services
     public class UserServiceMapper
     {
         private readonly UserAdminPanel.DAL.Services.UserService _userService;
+        private readonly IPasswordHasher _passwordHasher;
+        private readonly IJwtTokenService _jwtTokenService;
 
-        public UserServiceMapper(UserAdminPanel.DAL.Services.UserService userService)
+
+        public UserServiceMapper(UserAdminPanel.DAL.Services.UserService userService,
+            IPasswordHasher passwordHasher, IJwtTokenService jwtTokenService)
         {
             _userService = userService;
+            _passwordHasher = passwordHasher;
+            _jwtTokenService = jwtTokenService;
         }
 
         public async Task<ResultModel> Register(string email, string password, string confirmPassword)
@@ -45,8 +52,10 @@ namespace UsersAdminPanel.Models.Services
 
                 try
                 {
-                    await _userService.Register(email, password);
+                    var userId = await _userService.Register(email, password);
                     result.Success = true;
+
+                    await _userService.SendConfirmationEmail(email, userId);
                 }
                 catch (SqlException exc)
                 {
@@ -75,9 +84,27 @@ namespace UsersAdminPanel.Models.Services
             {
                 try
                 {
-                    var token = await _userService.Login(email, password);
+                    var user = await _userService.GetUserByEmail(email);
+
+                    if (user == null || String.IsNullOrEmpty(user.Id))
+                    {
+                        throw new Exception("Failed to login, user not found");
+                    }
+                    else if (user.LockoutEnabled)
+                    {
+                        throw new Exception("Failed to login, user is blocked");
+                    }
+
+                    var resultPassword = _passwordHasher.Verify(password, user!.PasswordHash);
+
+                    if (!resultPassword)
+                    {
+                        throw new Exception("Failed to login, wrong password");
+                    }
+
+                    var tokenStr = _jwtTokenService.GenerateToken(user);
                     result.Success = true;
-                    result.Token = token;
+                    result.Token = tokenStr;
                 }
                 catch (Exception ex)
                 {
@@ -88,7 +115,7 @@ namespace UsersAdminPanel.Models.Services
             else
             {
                 result.Success = false;
-                result.Message = "Failed to register user";
+                result.Message = "Failed to login user";
             }
 
             return result;
@@ -290,6 +317,33 @@ namespace UsersAdminPanel.Models.Services
             {
                 result.Success = false;
                 result.Message = $"Failed to delete unconfirmed users: {ex.Message}";
+            }
+            return result;
+        }
+
+        public async Task<ResultModel> VerifyEmailById(string userId)
+        {
+            var result = new LoginResultModel();
+
+            var user = await _userService.GetUserById(userId);
+
+            if (user == null || String.IsNullOrEmpty(user.Id))
+            {
+                result.Success = false;
+                result.Message = "User not found";
+            }
+            else if (user.LockoutEnabled)
+            {
+                result.Success = false;
+                result.Message = "User is blocked";
+            }
+            else
+            {
+                user.EmailConfirmed = true;
+                await _userService.UpdateUser(user);
+
+                result.Success = true;
+                result.User = new ApplicationUser() { Email = user?.Email ?? "" };
             }
             return result;
         }

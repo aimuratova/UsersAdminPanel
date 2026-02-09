@@ -49,7 +49,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container">        
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -84,11 +84,14 @@
                         } 
                         else {
                             // Токен недействителен или пользователь не найден
-                            window.location.href = '/Account/Login';
+                            $('#errorLabel').text(data.message).show();
                             localStorage.removeItem('jwtToken');
+                            window.location.href = '/Home/Index';
 						}
                     },
-                    error: function () {
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('Error:', textStatus, errorThrown);
+                        $('#errorLabel').text(jqXHR.responseText).show();
                         $("#authMenu").hide();
                         $(".nonAuthMenuClass").show();
                     }

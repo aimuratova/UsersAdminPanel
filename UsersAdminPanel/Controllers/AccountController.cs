@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UsersAdminPanel.Models.Services;
@@ -23,14 +24,14 @@ namespace UsersAdminPanel.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody]LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             var result = await _userService.Login(model.Email, model.Password);
             if (result.Success)
             {
                 return Ok(result);
-            }   
-            return BadRequest(result.Message);            
+            }
+            return BadRequest(result.Message);
         }
 
 
@@ -68,6 +69,25 @@ namespace UsersAdminPanel.Controllers
         public IActionResult LogOut()
         {
             return Ok();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> VerifyEmail(string userId)
+        {
+            var user = await _userService.VerifyEmailById(userId);
+            if (user == null)
+            {
+                return BadRequest("User not found.");
+            }
+
+            if (user.Success)
+            {
+                return Ok("Email successfully verified!");
+            }
+            else
+            {
+                return BadRequest("Invalid verification token.");
+            }
         }
     }
 }
