@@ -1,0 +1,66 @@
+﻿@using UsersAdminPanel.Models.ViewModels
+@model List<UserViewModel>
+@*
+*@
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="btn-group">
+        <button class="btn btn-outline-primary btn-sm bi bi-lock-fill" id="blockBtn">Block</button>
+        <button class="btn btn-outline-primary btn-sm" id="unblockBtn">
+            <i class="bi bi-unlock2-fill"></i>
+        </button>
+        <button class="btn btn-outline-danger btn-sm text-danger" id="deleteBtn" data-toggle="tooltip" data-placement="top" title="Delete selected users">
+            <i class="bi bi-trash"></i>
+        </button>
+        <button class="btn btn-outline-danger btn-sm text-danger" id="deleteUnverBtn" data-toggle="tooltip" data-placement="top" title="Delete all unconfirmed users">
+            <i class="bi bi-trash-fill"></i>
+        </button>
+    </div>
+
+    <input type="text" class="form-control form-control-sm w-25" placeholder="Filter" id="filterUsers">
+</div>
+<div class="table-responsive">
+    <table class="table align-middle" id="userTable">
+        <thead class="table-light">
+            <tr>
+                <th><input type="checkbox" id="checkAllBox"></th>
+                @* <th>Name</th> *@
+                <th>Email</th>
+                <th>Status</th>
+                <th>Last seen</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <input type="checkbox" class="checkBoxClass" value="@item.Id" />
+                    </td>
+                    @* <td>
+                        <div class="fw-semibold">Clare, Alex</div>
+                        <small class="text-muted">N/A</small>
+                    </td> *@
+                    <td>@item.Email</td>
+                    <td>
+                        @if (@item.Status == "Active") {
+                            <span class="badge bg-success-subtle text-success">@item.Status</span>
+                        }
+	                    @if (@item.Status == "Blocked")
+                        {
+                            <span class="badge bg-danger-subtle text-muted">@item.Status</span>
+						}
+                        @if (@item.Confirmed == "Confirmed")
+                        {
+                            <span class="bi bi-check-circle-fill"></span>
+                        }
+                    <td>
+                        <div class="small">@item.LastSeen</div>
+                        <div class="activity-bars"></div>
+                    </td>                
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+

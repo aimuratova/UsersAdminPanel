@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36915.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UsersAdminPanel", "UsersAdminPanel\UsersAdminPanel.csproj", "{DF9E5896-BD61-4568-BF4E-DA5C7C059BBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserAdminPanel.DAL", "UserAdminPanel.DAL\UserAdminPanel.DAL.csproj", "{2B92F04E-945A-4DB7-8CA2-62EE99F29571}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DF9E5896-BD61-4568-BF4E-DA5C7C059BBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF9E5896-BD61-4568-BF4E-DA5C7C059BBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF9E5896-BD61-4568-BF4E-DA5C7C059BBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF9E5896-BD61-4568-BF4E-DA5C7C059BBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B92F04E-945A-4DB7-8CA2-62EE99F29571}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B92F04E-945A-4DB7-8CA2-62EE99F29571}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B92F04E-945A-4DB7-8CA2-62EE99F29571}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B92F04E-945A-4DB7-8CA2-62EE99F29571}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {07F84C07-3F3C-4A53-BC99-AED2BD1AA5C0}
+	EndGlobalSection
+EndGlobal
